@@ -1,7 +1,8 @@
-import React, { useState } from "react";
-import { Menu, X } from "lucide-react";
+import React, { useContext,useState } from "react";
+import { Menu, X, Moon, Sun } from "lucide-react"; // added Sun and Moon icons
 import { Link, NavLink } from "react-router";
 import { motion, AnimatePresence } from "framer-motion";
+import AuthContext from "../../Context/AuthContext";
 
 const navItems = [
     { name: "Home", path: "/" },
@@ -13,10 +14,14 @@ const navItems = [
 ];
 
 const Navbar = () => {
+
+    const { darkMode,
+        toggleDarkMode } = useContext(AuthContext)
+
     const [isOpen, setIsOpen] = useState(false);
+
     const toggleMenu = () => setIsOpen(!isOpen);
 
-    // Animation variants for the mobile menu container
     const menuVariants = {
         hidden: { opacity: 0, height: 0, transition: { when: "afterChildren" } },
         visible: {
@@ -30,14 +35,16 @@ const Navbar = () => {
         },
     };
 
-    // Animation variants for individual menu items
     const itemVariants = {
         hidden: { opacity: 0, x: -20 },
         visible: { opacity: 1, x: 0 },
     };
 
     return (
-        <nav className="bg-green-900 text-white shadow-md px-6 py-4 backdrop-blur-sm sticky top-0 z-50">
+        <nav
+            className={`${darkMode ? "bg-gray-900 text-white" : "bg-green-900 text-white"
+                } shadow-md px-6 py-4 backdrop-blur-sm sticky top-0 z-50 transition-colors duration-300`}
+        >
             <div className="max-w-7xl mx-auto flex items-center justify-between relative">
 
                 {/* Logo with hover scale */}
@@ -57,7 +64,9 @@ const Navbar = () => {
                             key={name}
                             to={path}
                             className={({ isActive }) =>
-                                `hover:text-green-300 transition duration-200 ${isActive ? "text-green-300 font-semibold" : ""
+                                `hover:text-green-300 transition duration-200 ${isActive
+                                    ? "text-green-300 font-semibold"
+                                    : ""
                                 }`
                             }
                         >
@@ -66,8 +75,21 @@ const Navbar = () => {
                     ))}
                 </ul>
 
-                {/* Desktop Login */}
-                <div className="hidden md:flex">
+                {/* Desktop Login + Dark Mode Toggle */}
+                <div className="hidden md:flex items-center space-x-4">
+                    {/* Dark Mode Toggle Button */}
+                    <button
+                        onClick={toggleDarkMode}
+                        aria-label="Toggle dark mode"
+                        className="p-2 rounded-md hover:bg-green-700 transition"
+                    >
+                        {darkMode ? (
+                            <Sun size={20} className="text-yellow-300" />
+                        ) : (
+                            <Moon size={20} />
+                        )}
+                    </button>
+
                     <Link to="/login">
                         <motion.button
                             whileHover={{ scale: 1.05 }}
@@ -95,7 +117,7 @@ const Navbar = () => {
                 </button>
             </div>
 
-            {/* Mobile menu with AnimatePresence for mount/unmount animation */}
+            {/* Mobile menu with AnimatePresence */}
             <AnimatePresence>
                 {isOpen && (
                     <motion.div
@@ -103,7 +125,8 @@ const Navbar = () => {
                         animate="visible"
                         exit="hidden"
                         variants={menuVariants}
-                        className="md:hidden mt-4 overflow-hidden"
+                        className={`md:hidden mt-4 overflow-hidden ${darkMode ? "bg-gray-900 text-white" : "bg-green-900 text-white"
+                            } rounded-md`}
                     >
                         <ul className="flex flex-col space-y-3 text-sm font-medium pt-2">
                             {navItems.map(({ name, path }) => (
@@ -112,7 +135,9 @@ const Navbar = () => {
                                     to={path}
                                     onClick={() => setIsOpen(false)}
                                     className={({ isActive }) =>
-                                        `px-4 py-2 hover:text-green-300 transition ${isActive ? "text-green-300 font-semibold" : ""
+                                        `px-4 py-2 hover:text-green-300 transition ${isActive
+                                            ? "text-green-300 font-semibold"
+                                            : ""
                                         }`
                                     }
                                 >
@@ -121,16 +146,31 @@ const Navbar = () => {
                             ))}
                         </ul>
 
-                        <div className="mt-4 px-4">
-                            <Link to="/login">
+                        <div className="mt-4 px-4 flex justify-between items-center">
+                            <Link to="/login" onClick={() => setIsOpen(false)}>
                                 <motion.button
                                     whileHover={{ scale: 1.05 }}
                                     className="w-full bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md transition"
-                                    onClick={() => setIsOpen(false)}
                                 >
                                     Login
                                 </motion.button>
                             </Link>
+
+                            {/* Dark Mode Toggle Mobile */}
+                            <button
+                                onClick={() => {
+                                    toggleDarkMode();
+                                    setIsOpen(false);
+                                }}
+                                aria-label="Toggle dark mode"
+                                className="ml-4 p-2 rounded-md hover:bg-green-700 transition"
+                            >
+                                {darkMode ? (
+                                    <Sun size={20} className="text-yellow-300" />
+                                ) : (
+                                    <Moon size={20} />
+                                )}
+                            </button>
                         </div>
                     </motion.div>
                 )}

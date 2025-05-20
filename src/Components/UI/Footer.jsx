@@ -1,10 +1,15 @@
+import { useContext } from "react";
 import { FaFacebookF, FaInstagram, FaYoutube, FaWhatsapp } from "react-icons/fa";
 import { FaLocationDot, FaEnvelope, FaClock } from "react-icons/fa6";
 import { Link } from "react-router";
+import AuthContext from "../../Context/AuthContext";
 
 export default function Footer() {
+
+  const { darkMode } = useContext(AuthContext)
+
   return (
-    <footer className="bg-green-900 text-white px-6 py-10">
+    <footer className={`text-white px-6 py-10 ${darkMode ? "bg-gray-900" : "bg-green-900"}`}>
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-10">
         {/* Logo and Description */}
         <div>
