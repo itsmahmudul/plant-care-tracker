@@ -1,5 +1,5 @@
-import React, { useContext,useState } from "react";
-import { Menu, X, Moon, Sun } from "lucide-react"; // added Sun and Moon icons
+import React, { useContext, useState } from "react";
+import { Menu, X, Moon, Sun } from "lucide-react";
 import { Link, NavLink } from "react-router";
 import { motion, AnimatePresence } from "framer-motion";
 import AuthContext from "../../Context/AuthContext";
@@ -13,32 +13,30 @@ const navItems = [
     { name: "About", path: "/about" },
 ];
 
+const menuVariants = {
+    hidden: { opacity: 0, height: 0, transition: { when: "afterChildren" } },
+    visible: {
+        opacity: 1,
+        height: "auto",
+        transition: {
+            when: "beforeChildren",
+            staggerChildren: 0.15,
+            duration: 0.3,
+            ease: "easeOut",
+        },
+    },
+};
+
+const itemVariants = {
+    hidden: { opacity: 0, x: -20 },
+    visible: { opacity: 1, x: 0 },
+};
+
 const Navbar = () => {
-
-    const { darkMode,
-        toggleDarkMode } = useContext(AuthContext)
-
+    const { darkMode, toggleDarkMode } = useContext(AuthContext);
     const [isOpen, setIsOpen] = useState(false);
 
     const toggleMenu = () => setIsOpen(!isOpen);
-
-    const menuVariants = {
-        hidden: { opacity: 0, height: 0, transition: { when: "afterChildren" } },
-        visible: {
-            opacity: 1,
-            height: "auto",
-            transition: {
-                when: "beforeChildren",
-                staggerChildren: 0.1,
-                duration: 0.3,
-            },
-        },
-    };
-
-    const itemVariants = {
-        hidden: { opacity: 0, x: -20 },
-        visible: { opacity: 1, x: 0 },
-    };
 
     return (
         <nav
@@ -46,11 +44,13 @@ const Navbar = () => {
                 } shadow-md px-6 py-4 backdrop-blur-sm sticky top-0 z-50 transition-colors duration-300`}
         >
             <div className="max-w-7xl mx-auto flex items-center justify-between relative">
-
-                {/* Logo with hover scale */}
+                {/* Logo with entrance animation and hover scale */}
                 <Link to="/">
                     <motion.div
                         whileHover={{ scale: 1.1 }}
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ type: "spring", stiffness: 120, damping: 10 }}
                         className="text-2xl font-bold flex items-center cursor-pointer select-none"
                     >
                         <span className="text-3xl mr-2">🌿</span> Plant Care Tracker
@@ -64,13 +64,23 @@ const Navbar = () => {
                             key={name}
                             to={path}
                             className={({ isActive }) =>
-                                `hover:text-green-300 transition duration-200 ${isActive
-                                    ? "text-green-300 font-semibold"
-                                    : ""
+                                `relative px-2 py-1 hover:text-green-300 transition duration-200 ${isActive ? "text-green-300 font-semibold" : ""
                                 }`
                             }
                         >
-                            <li>{name}</li>
+                            {({ isActive }) => (
+                                <>
+                                    <li>{name}</li>
+                                    {/* Animated underline for active link */}
+                                    <motion.div
+                                        layoutId="underline"
+                                        initial={false}
+                                        animate={{ width: isActive ? "100%" : 0 }}
+                                        transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                                        className="absolute bottom-0 left-0 h-[2px] bg-green-300 rounded"
+                                    />
+                                </>
+                            )}
                         </NavLink>
                     ))}
                 </ul>
@@ -81,18 +91,26 @@ const Navbar = () => {
                     <button
                         onClick={toggleDarkMode}
                         aria-label="Toggle dark mode"
-                        className="p-2 rounded-md hover:bg-green-700 transition"
+                        className="p-2 cursor-pointer rounded-md hover:bg-green-700 transition"
                     >
-                        {darkMode ? (
-                            <Sun size={20} className="text-yellow-300" />
-                        ) : (
-                            <Moon size={20} />
-                        )}
+                        <motion.div
+                            key={darkMode ? "sun" : "moon"}
+                            initial={{ rotate: 0, scale: 1 }}
+                            animate={{ rotate: 360, scale: 1.2 }}
+                            transition={{ duration: 0.5 }}
+                        >
+                            {darkMode ? (
+                                <Sun size={20} className="text-yellow-300" />
+                            ) : (
+                                <Moon size={20} />
+                            )}
+                        </motion.div>
                     </button>
 
                     <Link to="/login">
                         <motion.button
-                            whileHover={{ scale: 1.05 }}
+                            whileHover={{ scale: 1.05, boxShadow: "0 4px 15px rgba(34,197,94,0.6)" }}
+                            whileTap={{ scale: 0.95 }}
                             className="bg-green-600 hover:bg-green-700 text-white font-bold px-4 py-2 rounded-md transition cursor-pointer"
                         >
                             Login
@@ -102,7 +120,7 @@ const Navbar = () => {
 
                 {/* Hamburger Button with rotation animation */}
                 <button
-                    className="md:hidden focus:outline-none hover:text-green-300 transition"
+                    className="cursor-pointer md:hidden focus:outline-none hover:text-green-300 transition"
                     onClick={toggleMenu}
                     aria-label="Toggle menu"
                 >
@@ -135,9 +153,7 @@ const Navbar = () => {
                                     to={path}
                                     onClick={() => setIsOpen(false)}
                                     className={({ isActive }) =>
-                                        `px-4 py-2 hover:text-green-300 transition ${isActive
-                                            ? "text-green-300 font-semibold"
-                                            : ""
+                                        `px-4 py-2 hover:text-green-300 transition ${isActive ? "text-green-300 font-semibold" : ""
                                         }`
                                     }
                                 >
@@ -149,7 +165,8 @@ const Navbar = () => {
                         <div className="mt-4 px-4 flex justify-between items-center">
                             <Link to="/login" onClick={() => setIsOpen(false)}>
                                 <motion.button
-                                    whileHover={{ scale: 1.05 }}
+                                    whileHover={{ scale: 1.05, boxShadow: "0 4px 15px rgba(34,197,94,0.6)" }}
+                                    whileTap={{ scale: 0.95 }}
                                     className="w-full bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md transition"
                                 >
                                     Login
@@ -163,13 +180,20 @@ const Navbar = () => {
                                     setIsOpen(false);
                                 }}
                                 aria-label="Toggle dark mode"
-                                className="ml-4 p-2 rounded-md hover:bg-green-700 transition"
+                                className="cursor-pointer ml-4 p-2 rounded-md hover:bg-green-700 transition"
                             >
-                                {darkMode ? (
-                                    <Sun size={20} className="text-yellow-300" />
-                                ) : (
-                                    <Moon size={20} />
-                                )}
+                                <motion.div
+                                    key={darkMode ? "sun-mobile" : "moon-mobile"}
+                                    initial={{ rotate: 0, scale: 1 }}
+                                    animate={{ rotate: 360, scale: 1.2 }}
+                                    transition={{ duration: 0.5 }}
+                                >
+                                    {darkMode ? (
+                                        <Sun size={20} className="text-yellow-300" />
+                                    ) : (
+                                        <Moon size={20} />
+                                    )}
+                                </motion.div>
                             </button>
                         </div>
                     </motion.div>
