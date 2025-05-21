@@ -8,14 +8,16 @@ import MyPlants from "../Components/Pages/MyPlants";
 import About from "../Components/Pages/About";
 import Register from "../Components/Authentication/Register";
 import Login from "../Components/Authentication/Login";
+import MyProfile from "../Components/Pages/MyProfile";
+import PrivetRouts from "./PrivetRouts";
 
 
 const router = createBrowserRouter([
     {
         path: '/',
-        element:<MainLayout></MainLayout>,
-        errorElement:<Error></Error>,
-        children:[
+        element: <MainLayout></MainLayout>,
+        errorElement: <Error></Error>,
+        children: [
             {
                 path: '/',
                 element: <Home></Home>
@@ -25,12 +27,22 @@ const router = createBrowserRouter([
                 element: <AllPlants></AllPlants>
             },
             {
-                path:'/add-plants',
-                element: <AddPlant></AddPlant>
+                path: '/add-plants',
+                element: <PrivetRouts>
+                    <AddPlant></AddPlant>
+                </PrivetRouts>
             },
             {
                 path: '/my-plants',
-                element: <MyPlants></MyPlants>
+                element: <PrivetRouts>
+                    <MyPlants></MyPlants>
+                </PrivetRouts>
+            },
+            {
+                path: '/my-profile',
+                element: <PrivetRouts>
+                    <MyProfile></MyProfile>
+                </PrivetRouts>
             },
             {
                 path: '/about',
@@ -42,7 +54,7 @@ const router = createBrowserRouter([
             },
             {
                 path: '/login',
-                element:<Login></Login>
+                element: <Login></Login>
             }
         ]
     }

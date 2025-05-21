@@ -33,10 +33,18 @@ const itemVariants = {
 };
 
 const Navbar = () => {
-    const { darkMode, toggleDarkMode } = useContext(AuthContext);
+    const { darkMode, toggleDarkMode, logOutUser, user } = useContext(AuthContext);
     const [isOpen, setIsOpen] = useState(false);
 
     const toggleMenu = () => setIsOpen(!isOpen);
+
+    const handleLogOut = () => {
+        logOutUser()
+            .then(() => {
+                console.log('logOut successfully')
+            })
+            .catch(error => console.log(error))
+    };
 
     return (
         <nav
@@ -85,8 +93,16 @@ const Navbar = () => {
                     ))}
                 </ul>
 
-                {/* Desktop Login + Dark Mode Toggle */}
+                {/*Avatar + Desktop Login + Dark Mode Toggle */}
                 <div className="hidden md:flex items-center space-x-4">
+                    {/* Avatar */}
+                    {user && (
+                        <Link to="/my-profile" className="avatar mr-3">
+                            <motion.div whileHover={{ scale: 1.05 }} className="ring-primary ring-offset-base-100 w-10 rounded-full ring-2 ring-offset-2">
+                                <img src={user.photoURL} alt="User Avatar" />
+                            </motion.div>
+                        </Link>
+                    )}
                     {/* Dark Mode Toggle Button */}
                     <button
                         onClick={toggleDarkMode}
@@ -107,15 +123,18 @@ const Navbar = () => {
                         </motion.div>
                     </button>
 
-                    <Link to="/login">
-                        <motion.button
-                            whileHover={{ scale: 1.05, boxShadow: "0 4px 15px rgba(34,197,94,0.6)" }}
-                            whileTap={{ scale: 0.95 }}
-                            className="bg-green-600 hover:bg-green-700 text-white font-bold px-4 py-2 rounded-md transition cursor-pointer"
-                        >
-                            Login
-                        </motion.button>
-                    </Link>
+                    {/* Login Button */}
+                    <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        onClick={handleLogOut}
+                        className="cursor-pointer relative rounded px-5 py-2.5 overflow-hidden group bg-green-700 hover:bg-green-600 text-white transition-all ease-out duration-300"
+                    >
+                        <span className="absolute right-0 w-8 h-32 -mt-12 transition-all duration-1000 transform translate-x-12 bg-white opacity-10 rotate-12 group-hover:-translate-x-40 ease"></span>
+                        <span className="relative">
+                            {user ? "Log Out" : <Link to="/login">Login</Link>}
+                        </span>
+                    </motion.button>
                 </div>
 
                 {/* Hamburger Button with rotation animation */}
@@ -144,16 +163,19 @@ const Navbar = () => {
                         exit="hidden"
                         variants={menuVariants}
                         className={`md:hidden mt-4 overflow-hidden ${darkMode ? "bg-gray-900 text-white" : "bg-green-900 text-white"
-                            } rounded-md`}
+                            } rounded-lg shadow-lg border border-green-700`}
                     >
-                        <ul className="flex flex-col space-y-3 text-sm font-medium pt-2">
+                        {/* Navigation Links */}
+                        <ul className="flex flex-col space-y-2 px-4 pt-4 pb-2 text-base font-medium">
                             {navItems.map(({ name, path }) => (
                                 <NavLink
                                     key={name}
                                     to={path}
                                     onClick={() => setIsOpen(false)}
                                     className={({ isActive }) =>
-                                        `px-4 py-2 hover:text-green-300 transition ${isActive ? "text-green-300 font-semibold" : ""
+                                        `block w-full px-3 py-2 rounded-md transition ${isActive
+                                            ? "bg-green-700 text-green-200 font-semibold"
+                                            : "hover:bg-green-800 hover:text-green-100"
                                         }`
                                     }
                                 >
@@ -162,43 +184,71 @@ const Navbar = () => {
                             ))}
                         </ul>
 
-                        <div className="mt-4 px-4 flex justify-between items-center">
-                            <Link to="/login" onClick={() => setIsOpen(false)}>
-                                <motion.button
-                                    whileHover={{ scale: 1.05, boxShadow: "0 4px 15px rgba(34,197,94,0.6)" }}
-                                    whileTap={{ scale: 0.95 }}
-                                    className="w-full bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md transition"
-                                >
-                                    Login
-                                </motion.button>
-                            </Link>
+                        <hr className="border-green-700 mx-4 my-3" />
 
-                            {/* Dark Mode Toggle Mobile */}
-                            <button
+                        {/* User + Theme + Auth Controls */}
+                        <div className="px-4 pb-4 space-y-3">
+                            <div className="flex items-center justify-between">
+                                {/* Avatar */}
+                                {user && (
+                                    <Link
+                                        to="/my-profile"
+                                        onClick={() => setIsOpen(false)}
+                                        className="flex items-center space-x-2"
+                                    >
+                                        <motion.div
+                                            whileHover={{ scale: 1.05 }}
+                                            className="w-10 h-10 rounded-full ring-2 ring-green-300 overflow-hidden"
+                                        >
+                                            <img src={user.photoURL} alt="User Avatar" className="w-full h-full object-cover" />
+                                        </motion.div>
+                                        <span className="text-sm">{user.displayName || "My Profile"}</span>
+                                    </Link>
+                                )}
+
+                                {/* Dark Mode Toggle */}
+                                <button
+                                    onClick={() => {
+                                        toggleDarkMode();
+                                        setIsOpen(false);
+                                    }}
+                                    aria-label="Toggle dark mode"
+                                    className="p-2 rounded-md hover:bg-green-800 transition"
+                                >
+                                    <motion.div
+                                        key={darkMode ? "sun-mobile" : "moon-mobile"}
+                                        initial={{ rotate: 0, scale: 1 }}
+                                        animate={{ rotate: 360, scale: 1.2 }}
+                                        transition={{ duration: 0.5 }}
+                                    >
+                                        {darkMode ? (
+                                            <Sun size={20} className="text-yellow-300" />
+                                        ) : (
+                                            <Moon size={20} />
+                                        )}
+                                    </motion.div>
+                                </button>
+                            </div>
+
+                            {/* Login / Logout */}
+                            <motion.button
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
                                 onClick={() => {
-                                    toggleDarkMode();
+                                    if (user) {
+                                        handleLogOut();
+                                    }
                                     setIsOpen(false);
                                 }}
-                                aria-label="Toggle dark mode"
-                                className="cursor-pointer ml-4 p-2 rounded-md hover:bg-green-700 transition"
+                                className="w-full text-center rounded-md bg-green-700 hover:bg-green-600 px-4 py-2 text-white transition"
                             >
-                                <motion.div
-                                    key={darkMode ? "sun-mobile" : "moon-mobile"}
-                                    initial={{ rotate: 0, scale: 1 }}
-                                    animate={{ rotate: 360, scale: 1.2 }}
-                                    transition={{ duration: 0.5 }}
-                                >
-                                    {darkMode ? (
-                                        <Sun size={20} className="text-yellow-300" />
-                                    ) : (
-                                        <Moon size={20} />
-                                    )}
-                                </motion.div>
-                            </button>
+                                {user ? "Log Out" : <Link to="/login">Login</Link>}
+                            </motion.button>
                         </div>
                     </motion.div>
                 )}
             </AnimatePresence>
+
         </nav>
     );
 };

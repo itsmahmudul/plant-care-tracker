@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import AuthContext from './AuthContext';
 import { auth } from '../Firebase/firebase.config';
-import { createUserWithEmailAndPassword, GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
+import { createUserWithEmailAndPassword, GoogleAuthProvider, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut } from 'firebase/auth';
 
 
 const googleProvider = new GoogleAuthProvider();
 
 const AuthProvider = ({ children }) => {
 
-    
-    const [loading, setLoading] = useState(true)
+    const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true);
     const [darkMode, setDarkMode] = useState(() => {
         const saved = localStorage.getItem("darkMode");
         return saved === "true" || false;
@@ -30,6 +30,21 @@ const AuthProvider = ({ children }) => {
         return signInWithPopup(auth, googleProvider);
     }
 
+     const logOutUser = () => {
+        setLoading(true);
+        return signOut(auth);
+    }
+
+    useEffect( () => {
+        const unSubscribe = onAuthStateChanged(auth, (currentUser) => {
+            setUser(currentUser);
+            setLoading(false);
+        })
+        return () => {
+            unSubscribe();
+        }
+    } , [])
+
     useEffect(() => {
         const className = "dark";
         const htmlElement = document.documentElement;
@@ -45,10 +60,12 @@ const AuthProvider = ({ children }) => {
 
     const userInfo = {
         darkMode,
+        user,
         toggleDarkMode,
         cerateUser,
         signInUser,
         googleSignIn,
+        logOutUser,
         loading
     }
 
