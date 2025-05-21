@@ -67,7 +67,8 @@ const Navbar = () => {
 
                 {/* Desktop Nav */}
                 <ul className="hidden md:flex space-x-8 text-sm font-medium absolute left-1/2 transform -translate-x-1/2">
-                    {navItems.map(({ name, path }) => (
+                    {navItems.filter(item => !(user && item.name === "Register"))
+                    .map(({ name, path }) => (
                         <NavLink
                             key={name}
                             to={path}

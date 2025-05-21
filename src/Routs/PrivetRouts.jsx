@@ -8,11 +8,13 @@ const PrivetRouts = ({ children }) => {
     const location = useLocation();
 
     if (loading) {
-        return <span className="loading loading-spinner text-success"></span>
+        return <div className='text-center text-7xl mt-6'>
+            <span className="loading loading-spinner text-success"></span>
+        </div>
     }
 
     if(!user){
-        <Navigate state={location.pathname} to='/login'></Navigate>
+        return <Navigate state={location.pathname} to='/login'></Navigate>
     }
 
     return children
