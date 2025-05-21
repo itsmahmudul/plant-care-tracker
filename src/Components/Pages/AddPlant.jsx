@@ -1,6 +1,7 @@
 import React, { useContext, useState } from 'react';
 import Swal from 'sweetalert2';
 import AuthContext from '../../Context/AuthContext';
+import { parseISO, format, addDays, isValid } from 'date-fns';
 
 const AddPlant = () => {
     const { user, darkMode } = useContext(AuthContext);
@@ -21,20 +22,49 @@ const AddPlant = () => {
 
     const [formData, setFormData] = useState(initialFormData);
 
+    const calculateNextWateringDate = (lastDate, frequency) => {
+        const match = frequency.match(/\d+/);
+        const days = match ? parseInt(match[0]) : 0;
+
+        const parsedDate = parseISO(lastDate);
+        if (isValid(parsedDate) && days > 0) {
+            return format(addDays(parsedDate, days), 'yyyy-MM-dd');
+        }
+        return '';
+    };
+
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData({ ...formData, [name]: value });
+
+        const updatedData = { ...formData, [name]: value };
+
+        // Auto-calculate nextWateringDate
+        if (name === 'lastWateredDate' || name === 'wateringFrequency') {
+            const nextDate = calculateNextWateringDate(
+                name === 'lastWateredDate' ? value : formData.lastWateredDate,
+                name === 'wateringFrequency' ? value : formData.wateringFrequency
+            );
+            updatedData.nextWateringDate = nextDate;
+        }
+
+        setFormData(updatedData);
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
+
+        const formattedData = {
+            ...formData,
+            lastWateredDate: format(parseISO(formData.lastWateredDate), 'yyyy-MM-dd'),
+            nextWateringDate: formData.nextWateringDate
+        };
 
         fetch('http://localhost:3000/plants', {
             method: 'POST',
             headers: {
                 'content-type': 'application/json'
             },
-            body: JSON.stringify(formData)
+            body: JSON.stringify(formattedData)
         })
             .then(res => res.json())
             .then(data => {
@@ -63,13 +93,6 @@ const AddPlant = () => {
                     ? 'bg-gray-900 bg-opacity-70 text-gray-200 shadow-black'
                     : 'bg-white bg-opacity-85 text-green-700'
                     }`}
-                style={{
-                    backgroundImage: `url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='${darkMode ? '%23666' : '%2394a3b8'
-                        }' fill-opacity='0.05'%3E%3Cpath d='M20 50c10-10 30-10 40 0s10 30 0 40-30 10-40 0-10-30 0-40z'/%3E%3C/g%3E%3C/svg%3E")`,
-                    backgroundBlendMode: 'overlay',
-                    backgroundRepeat: 'repeat',
-                    backgroundSize: 'auto'
-                }}
             >
                 <h2 className={`text-3xl font-bold mb-6 text-center ${darkMode ? 'text-green-400' : 'text-green-700'}`}>
                     Add New Plant
@@ -121,7 +144,7 @@ const AddPlant = () => {
                                 }`}
                             required
                         >
-                            <option value="" className={darkMode ? 'bg-gray-800 text-gray-400' : ''}>Select Category</option>
+                            <option value="">Select Category</option>
                             <option value="succulent">Succulent</option>
                             <option value="herb">Herb</option>
                             <option value="fern">Fern</option>
@@ -144,7 +167,7 @@ const AddPlant = () => {
                                 }`}
                             required
                         >
-                            <option value="" className={darkMode ? 'bg-gray-800 text-gray-400' : ''}>Select Care Level</option>
+                            <option value="">Select Care Level</option>
                             <option value="easy">Easy</option>
                             <option value="moderate">Moderate</option>
                             <option value="difficult">Difficult</option>
@@ -184,19 +207,18 @@ const AddPlant = () => {
                         />
                     </div>
 
-                    {/* Next Watering Date */}
+                    {/* Next Watering Date (auto-calculated) */}
                     <div>
                         <label className={`block font-medium mb-1 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>Next Watering Date</label>
                         <input
                             type="date"
                             name="nextWateringDate"
                             value={formData.nextWateringDate}
-                            onChange={handleChange}
-                            className={`w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 ${darkMode
-                                ? 'bg-gray-800 border-gray-700 focus:ring-green-400 text-gray-200'
-                                : 'bg-white border-gray-300 focus:ring-green-300 text-gray-700'
+                            readOnly
+                            className={`w-full border rounded-lg px-4 py-2 bg-gray-100 cursor-not-allowed ${darkMode
+                                ? 'bg-gray-700 border-gray-600 text-gray-300'
+                                : 'bg-gray-200 border-gray-300 text-gray-600'
                                 }`}
-                            required
                         />
                     </div>
 
@@ -264,7 +286,7 @@ const AddPlant = () => {
                     <div className="col-span-full pt-4">
                         <button
                             type="submit"
-                            className={`w-full font-semibold py-3 px-6 rounded-lg shadow-lg transition-all duration-200 ${darkMode
+                            className={`w-full cursor-pointer font-semibold py-3 px-6 rounded-lg shadow-lg transition-all duration-200 ${darkMode
                                 ? 'bg-green-700 hover:bg-green-600 text-white shadow-black'
                                 : 'bg-green-600 hover:bg-green-700 text-white'
                                 }`}
