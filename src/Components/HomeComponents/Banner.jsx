@@ -23,7 +23,7 @@ const events = [
 
 const Banner = () => {
     return (
-        <div className="relative w-full max-w-5xl mx-auto mt-10 rounded-2xl overflow-hidden">
+        <div className="relative w-full max-w-5xl mx-auto mt-10 rounded-2xl overflow-hidden border border-gray-100">
 
             <div className="absolute z-10 top-1/2 left-4 -translate-y-1/2 text-white bg-black/50 p-2 rounded-full cursor-pointer swiper-button-prev">
                 <ChevronLeft />
