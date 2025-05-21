@@ -1,12 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import AuthContext from './AuthContext';
+import { auth } from '../Firebase/firebase.config';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
 
 const AuthProvider = ({ children }) => {
 
+    const [user, setUser] = useState(null)
+    const [loading, setLoading] = useState(true)
     const [darkMode, setDarkMode] = useState(() => {
         const saved = localStorage.getItem("darkMode");
         return saved === "true" || false;
     });
+
+    const cerateUser = (email, password) => {
+        setLoading(true);
+        return createUserWithEmailAndPassword(auth, email, password)
+    }
 
     useEffect(() => {
         const className = "dark";
@@ -23,7 +32,9 @@ const AuthProvider = ({ children }) => {
 
     const userInfo = {
         darkMode,
-        toggleDarkMode
+        toggleDarkMode,
+        cerateUser,
+        loading
     }
 
     return (
