@@ -74,7 +74,7 @@ const PlantCard = ({ plant }) => {
                 </p>
             </div>
 
-            <Link to=''>
+            <Link to={`/plant-details/${plant._id}`}>
                 <button
                     className="mt-6 w-full cursor-pointer bg-gradient-to-r from-green-500 to-green-700 hover:from-green-600 hover:to-green-800 text-white py-2 px-4 rounded-xl text-sm font-semibold transition-all duration-300 ease-in-out shadow-md hover:shadow-lg"
                 >

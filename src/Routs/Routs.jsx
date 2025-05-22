@@ -10,6 +10,7 @@ import Register from "../Components/Authentication/Register";
 import Login from "../Components/Authentication/Login";
 import MyProfile from "../Components/Pages/MyProfile";
 import PrivetRouts from "./PrivetRouts";
+import PlantDetails from "../Components/HomeComponents/PlantDetails";
 
 
 const router = createBrowserRouter([
@@ -43,6 +44,13 @@ const router = createBrowserRouter([
                 path: '/my-profile',
                 element: <PrivetRouts>
                     <MyProfile></MyProfile>
+                </PrivetRouts>
+            },
+            {
+                path: '/plant-details/:plantId',
+                loader: () => fetch('http://localhost:3000/plants'),
+                element: <PrivetRouts>
+                    <PlantDetails></PlantDetails>
                 </PrivetRouts>
             },
             {
