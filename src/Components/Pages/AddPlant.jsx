@@ -17,7 +17,7 @@ const AddPlant = () => {
         nextWateringDate: '',
         healthStatus: '',
         userEmail: user.email || '',
-        userName: user.name || ''
+        userName: user.displayName || ''
     };
 
     const [formData, setFormData] = useState(initialFormData);
@@ -89,7 +89,7 @@ const AddPlant = () => {
                 }`}
         >
             <div
-                className={`max-w-3xl w-full p-8 rounded-2xl shadow-xl backdrop-blur-md ${darkMode
+                className={`max-w-3xl my-16 w-full p-8 rounded-2xl shadow-xl backdrop-blur-md ${darkMode
                     ? 'bg-gray-900 bg-opacity-70 text-gray-200 shadow-black'
                     : 'bg-white bg-opacity-85 text-green-700'
                     }`}
