@@ -11,7 +11,7 @@ const Home = () => {
     return (
         <div className={`${darkMode ? 'bg-gray-800 text-gray-100' : 'bg-white text-gray-900'}`}>
             {/* Hero Section */}
-            <section className={`text-center px-4 py-12 ${darkMode ? 'bg-gradient-to-b from-gray-700 to-gray-800' : 'bg-gradient-to-b from-green-50 to-white'}`}>
+            <section className={`text-center ${darkMode ? 'bg-gradient-to-b from-gray-700 to-gray-800' : 'bg-gradient-to-b from-green-50 to-white'}`}>
                 <h1 className={`text-3xl md:text-6xl font-extrabold ${darkMode ? 'text-green-300' : 'text-green-700'} mb-6`}>
                     Feel The Nature
                 </h1>
@@ -30,7 +30,7 @@ const Home = () => {
             </section>
 
             {/* Plants Grid */}
-            <section className="px-4 md:px-12 py-12 rounded-t-3xl">
+            <section className="max-w-7xl mx-auto my-12 rounded-t-3xl">
                 <h2 className={`text-xl md:text-3xl font-semibold text-center mb-10 ${darkMode ? 'text-green-200' : 'text-green-800'}`}>
                     Explore Our Plant Collection
                 </h2>

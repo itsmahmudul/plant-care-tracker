@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { useLoaderData, useNavigate } from 'react-router';
 import AuthContext from '../../Context/AuthContext';
 
@@ -6,6 +6,17 @@ const AllPlants = () => {
     const { darkMode } = useContext(AuthContext);
     const allPlants = useLoaderData();
     const navigate = useNavigate();
+    const [sortOption, setSortOption] = useState('');
+
+    // Create a sorted copy of allPlants based on the selected sort option
+    const sortedPlants = [...allPlants];
+
+    if (sortOption === 'nextWatering') {
+        sortedPlants.sort((a, b) => new Date(a.nextWateringDate) - new Date(b.nextWateringDate));
+    } else if (sortOption === 'careLevel') {
+        const careOrder = { Low: 1, Medium: 2, High: 3 };
+        sortedPlants.sort((a, b) => careOrder[a.careLevel] - careOrder[b.careLevel]);
+    }
 
     return (
         <div className={`p-8 min-h-screen ${darkMode ? 'bg-gray-800' : 'bg-gray-50'}`}>
@@ -14,8 +25,7 @@ const AllPlants = () => {
                     All Plants
                 </h2>
                 <p
-                    className={`mb-8 text-lg max-w-4xl leading-relaxed mx-auto ${darkMode ? 'text-green-300' : 'text-green-900'
-                        }`}
+                    className={`mb-8 text-lg max-w-4xl leading-relaxed mx-auto ${darkMode ? 'text-green-300' : 'text-green-900'}`}
                 >
                     Welcome to your personal plant collection! Below you’ll find a comprehensive list of all the
                     plants you’ve added, each with key details like its category and how often it needs watering.
@@ -26,9 +36,21 @@ const AllPlants = () => {
                 </p>
             </div>
 
+            {/* Sort Dropdown */}
+            <div className="mb-6 flex justify-end">
+                <select
+                    value={sortOption}
+                    onChange={(e) => setSortOption(e.target.value)}
+                    className={`px-4 py-2 rounded-md border ${darkMode ? 'bg-gray-700 text-green-200 border-gray-600' : 'bg-white text-green-900 border-gray-300'}`}
+                >
+                    <option value="">Sort By</option>
+                    <option value="nextWatering">Next Watering Date</option>
+                    <option value="careLevel">Care Level</option>
+                </select>
+            </div>
+
             <div
-                className={`overflow-x-auto rounded-lg shadow-lg border ${darkMode ? 'border-gray-700 bg-gray-800' : 'border-gray-300 bg-white'
-                    }`}
+                className={`overflow-x-auto rounded-lg shadow-lg border ${darkMode ? 'border-gray-700 bg-gray-800' : 'border-gray-300 bg-white'}`}
             >
                 <table className="min-w-full table-auto border-collapse">
                     <thead className={`${darkMode ? 'bg-green-900' : 'bg-green-100'}`}>
@@ -36,8 +58,7 @@ const AllPlants = () => {
                             {['Picture', 'Plant Name', 'Category', 'Watering Frequency', 'Actions'].map((header) => (
                                 <th
                                     key={header}
-                                    className={`px-6 py-3 text-left text-sm font-semibold uppercase tracking-wide ${darkMode ? 'text-green-300' : 'text-green-800'
-                                        }`}
+                                    className={`px-6 py-3 text-left text-sm font-semibold uppercase tracking-wide ${darkMode ? 'text-green-300' : 'text-green-800'}`}
                                 >
                                     {header}
                                 </th>
@@ -45,12 +66,11 @@ const AllPlants = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {allPlants && allPlants.length > 0 ? (
-                            allPlants.map((plant) => (
+                        {sortedPlants && sortedPlants.length > 0 ? (
+                            sortedPlants.map((plant) => (
                                 <tr
                                     key={plant.id}
-                                    className={`transition-colors duration-300 ${darkMode ? 'hover:bg-green-700' : 'hover:bg-green-50'
-                                        }`}
+                                    className={`transition-colors duration-300 ${darkMode ? 'hover:bg-green-700' : 'hover:bg-green-50'}`}
                                 >
                                     <td className="px-6 py-4">
                                         <img
@@ -72,8 +92,8 @@ const AllPlants = () => {
                                         <button
                                             onClick={() => navigate(`/plant-details/${plant._id}`)}
                                             className={`text-sm font-semibold cursor-pointer px-4 py-2 rounded-lg shadow-md transition duration-300 transform hover:scale-105 ${darkMode
-                                                    ? 'bg-green-500 hover:bg-green-600 text-white'
-                                                    : 'bg-green-600 hover:bg-green-700 text-white'
+                                                ? 'bg-green-500 hover:bg-green-600 text-white'
+                                                : 'bg-green-600 hover:bg-green-700 text-white'
                                                 }`}
                                         >
                                             View Details
