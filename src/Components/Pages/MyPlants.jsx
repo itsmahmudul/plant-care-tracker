@@ -1,5 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { useLoaderData, useNavigate } from 'react-router';
+import { Link, useLoaderData } from 'react-router';
 import AuthContext from '../../Context/AuthContext';
 import Swal from 'sweetalert2';
 
@@ -9,7 +9,6 @@ const MyPlants = () => {
     const { user } = useContext(AuthContext);
     const loadedPlants = useLoaderData();
     const [plants, setPlants] = useState([]);
-    const navigate = useNavigate();
 
     // Initialize local plants state from loader data
     useEffect(() => {
@@ -77,12 +76,12 @@ const MyPlants = () => {
 
                             {/* update and delete button */}
                             <div className="flex gap-2 mt-4">
-                                <button
-                                    onClick={() => navigate(`/update-plant/${plant._id}`)}
+                                <Link
+                                    to={`/update-plant/${plant._id}`}
                                     className="bg-blue-600 hover:bg-blue-700 text-white px-4 cursor-pointer py-2 rounded-md text-sm"
                                 >
                                     Update
-                                </button>
+                                </Link>
                                 <button
                                     onClick={() => handleDeleteClick(plant)}
                                     className="bg-red-500 hover:bg-red-600 text-white cursor-pointer px-4 py-2 rounded-md text-sm"

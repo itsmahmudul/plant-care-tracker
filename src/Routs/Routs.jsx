@@ -58,6 +58,7 @@ const router = createBrowserRouter([
             },
             {
                 path: '/update-plant/:plantId',
+                loader: ({ params }) => fetch(`http://localhost:3000/plants/${params.plantId}`),
                 element: <PrivetRouts>
                     <UpdatePlant></UpdatePlant>
                 </PrivetRouts>
