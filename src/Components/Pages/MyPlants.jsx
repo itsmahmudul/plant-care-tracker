@@ -31,7 +31,7 @@ const MyPlants = () => {
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const response = await fetch(`http://localhost:3000/plants/${plant._id}`, {
+                    const response = await fetch(`https://plant-care-tracker-omega.vercel.app/plants/${plant._id}`, {
                         method: 'DELETE',
                     });
                     const data = await response.json();

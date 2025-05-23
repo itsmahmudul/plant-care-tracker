@@ -59,7 +59,7 @@ const AddPlant = () => {
             nextWateringDate: formData.nextWateringDate
         };
 
-        fetch('http://localhost:3000/plants', {
+        fetch('https://plant-care-tracker-omega.vercel.app/plants', {
             method: 'POST',
             headers: {
                 'content-type': 'application/json'

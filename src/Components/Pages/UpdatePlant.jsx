@@ -64,7 +64,7 @@ const UpdatePlant = () => {
             nextWateringDate: formData.nextWateringDate
         };
 
-        fetch(`http://localhost:3000/plants/${formData._id || formData.id}`, {
+        fetch(`https://plant-care-tracker-omega.vercel.app/plants/${formData._id || formData.id}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(updatedData)

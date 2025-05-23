@@ -1,5 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { useLoaderData, useNavigate } from 'react-router';
+import { Tooltip as ReactTooltip } from 'react-tooltip';
 import AuthContext from '../../Context/AuthContext';
 
 const AllPlants = () => {
@@ -8,7 +9,7 @@ const AllPlants = () => {
     const navigate = useNavigate();
     const [sortOption, setSortOption] = useState('');
 
-    // Create a sorted copy of allPlants based on the selected sort option
+    // Sorting logic
     const sortedPlants = [...allPlants];
 
     if (sortOption === 'nextWatering') {
@@ -42,6 +43,8 @@ const AllPlants = () => {
                     value={sortOption}
                     onChange={(e) => setSortOption(e.target.value)}
                     className={`px-4 py-2 rounded-md border ${darkMode ? 'bg-gray-700 text-green-200 border-gray-600' : 'bg-white text-green-900 border-gray-300'}`}
+                    data-tooltip-id="tooltip"
+                    data-tooltip-content="Sort your plants by upcoming watering or care level"
                 >
                     <option value="">Sort By</option>
                     <option value="nextWatering">Next Watering Date</option>
@@ -49,9 +52,7 @@ const AllPlants = () => {
                 </select>
             </div>
 
-            <div
-                className={`overflow-x-auto rounded-lg shadow-lg border ${darkMode ? 'border-gray-700 bg-gray-800' : 'border-gray-300 bg-white'}`}
-            >
+            <div className={`overflow-x-auto rounded-lg shadow-lg border ${darkMode ? 'border-gray-700 bg-gray-800' : 'border-gray-300 bg-white'}`}>
                 <table className="min-w-full table-auto border-collapse">
                     <thead className={`${darkMode ? 'bg-green-900' : 'bg-green-100'}`}>
                         <tr>
@@ -69,7 +70,7 @@ const AllPlants = () => {
                         {sortedPlants && sortedPlants.length > 0 ? (
                             sortedPlants.map((plant) => (
                                 <tr
-                                    key={plant.id}
+                                    key={plant._id}
                                     className={`transition-colors duration-300 ${darkMode ? 'hover:bg-green-700' : 'hover:bg-green-50'}`}
                                 >
                                     <td className="px-6 py-4">
@@ -77,6 +78,8 @@ const AllPlants = () => {
                                             src={plant.image || 'https://via.placeholder.com/80?text=No+Image'}
                                             alt={plant.plantName}
                                             className="w-20 h-20 object-cover rounded-md shadow-sm"
+                                            data-tooltip-id="tooltip"
+                                            data-tooltip-content={`Plant: ${plant.plantName}`}
                                         />
                                     </td>
                                     <td className={`${darkMode ? 'text-green-300' : 'text-green-900'} px-6 py-4 text-lg font-medium`}>
@@ -85,7 +88,11 @@ const AllPlants = () => {
                                     <td className={`${darkMode ? 'text-green-400' : 'text-green-800'} px-6 py-4`}>
                                         {plant.category}
                                     </td>
-                                    <td className={`${darkMode ? 'text-green-400' : 'text-green-800'} px-6 py-4`}>
+                                    <td
+                                        className={`${darkMode ? 'text-green-400' : 'text-green-800'} px-6 py-4`}
+                                        data-tooltip-id="tooltip"
+                                        data-tooltip-content={`Water this plant ${plant.wateringFrequency}.`}
+                                    >
                                         {plant.wateringFrequency}
                                     </td>
                                     <td className="px-6 py-4">
@@ -95,6 +102,8 @@ const AllPlants = () => {
                                                 ? 'bg-green-500 hover:bg-green-600 text-white'
                                                 : 'bg-green-600 hover:bg-green-700 text-white'
                                                 }`}
+                                            data-tooltip-id="tooltip"
+                                            data-tooltip-content="View detailed plant info"
                                         >
                                             View Details
                                         </button>
@@ -111,6 +120,9 @@ const AllPlants = () => {
                     </tbody>
                 </table>
             </div>
+
+            {/* Tooltip Component */}
+            <ReactTooltip id="tooltip" place="top" effect="solid" className="z-50" />
         </div>
     );
 };

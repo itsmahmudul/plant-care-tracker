@@ -22,12 +22,13 @@ const router = createBrowserRouter([
         children: [
             {
                 path: '/',
-                loader: () => fetch('http://localhost:3000/plants'),
+                loader: () => fetch('https://plant-care-tracker-omega.vercel.app/plants'),
+                hydrateFallbackElement:<div className="text-center mt-10"><span className="loading loading-bars loading-xl"></span></div>, 
                 element: <Home></Home>
             },
             {
                 path: '/all-plants',
-                loader: () => fetch('http://localhost:3000/plants'),
+                loader: () => fetch('https://plant-care-tracker-omega.vercel.app/plants'),
                 element: <AllPlants></AllPlants>
             },
             {
@@ -38,7 +39,7 @@ const router = createBrowserRouter([
             },
             {
                 path: '/my-plants',
-                loader: () => fetch('http://localhost:3000/plants'),
+                loader: () => fetch('https://plant-care-tracker-omega.vercel.app/plants'),
                 element: <PrivetRouts>
                     <MyPlants></MyPlants>
                 </PrivetRouts>
@@ -51,14 +52,14 @@ const router = createBrowserRouter([
             },
             {
                 path: '/plant-details/:plantId',
-                loader: () => fetch('http://localhost:3000/plants'),
+                loader: () => fetch('https://plant-care-tracker-omega.vercel.app/plants'),
                 element: <PrivetRouts>
                     <PlantDetails></PlantDetails>
                 </PrivetRouts>
             },
             {
                 path: '/update-plant/:plantId',
-                loader: ({ params }) => fetch(`http://localhost:3000/plants/${params.plantId}`),
+                loader: ({ params }) => fetch(`https://plant-care-tracker-omega.vercel.app/plants/${params.plantId}`),
                 element: <PrivetRouts>
                     <UpdatePlant></UpdatePlant>
                 </PrivetRouts>

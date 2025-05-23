@@ -4,6 +4,9 @@ import { Link, NavLink } from "react-router";
 import { motion, AnimatePresence } from "framer-motion";
 import AuthContext from "../../Context/AuthContext";
 
+import { Tooltip as ReactTooltip } from "react-tooltip";
+import 'react-tooltip/dist/react-tooltip.css';
+
 const navItems = [
     { name: "Home", path: "/" },
     { name: "All Plants", path: "/all-plants" },
@@ -68,42 +71,57 @@ const Navbar = () => {
                 {/* Desktop Nav */}
                 <ul className="hidden md:flex space-x-8 text-sm font-medium absolute left-1/2 transform -translate-x-1/2">
                     {navItems.filter(item => !(user && item.name === "Register"))
-                    .map(({ name, path }) => (
-                        <NavLink
-                            key={name}
-                            to={path}
-                            className={({ isActive }) =>
-                                `relative px-2 py-1 hover:text-green-300 transition duration-200 ${isActive ? "text-green-300 font-semibold" : ""
-                                }`
-                            }
-                        >
-                            {({ isActive }) => (
-                                <>
-                                    <li>{name}</li>
-                                    {/* Animated underline for active link */}
-                                    <motion.div
-                                        layoutId="underline"
-                                        initial={false}
-                                        animate={{ width: isActive ? "100%" : 0 }}
-                                        transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                                        className="absolute bottom-0 left-0 h-[2px] bg-green-300 rounded"
-                                    />
-                                </>
-                            )}
-                        </NavLink>
-                    ))}
+                        .map(({ name, path }) => (
+                            <NavLink
+                                key={name}
+                                to={path}
+                                className={({ isActive }) =>
+                                    `relative px-2 py-1 hover:text-green-300 transition duration-200 ${isActive ? "text-green-300 font-semibold" : ""
+                                    }`
+                                }
+                            >
+                                {({ isActive }) => (
+                                    <>
+                                        <li>{name}</li>
+                                        {/* Animated underline for active link */}
+                                        <motion.div
+                                            layoutId="underline"
+                                            initial={false}
+                                            animate={{ width: isActive ? "100%" : 0 }}
+                                            transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                                            className="absolute bottom-0 left-0 h-[2px] bg-green-300 rounded"
+                                        />
+                                    </>
+                                )}
+                            </NavLink>
+                        ))}
                 </ul>
 
                 {/*Avatar + Desktop Login + Dark Mode Toggle */}
                 <div className="hidden md:flex items-center space-x-4">
-                    {/* Avatar */}
+                    {/* Avatar with Tooltip */}
                     {user && (
-                        <Link to="/my-profile" className="avatar mr-3">
-                            <motion.div whileHover={{ scale: 1.05 }} className="ring-primary ring-offset-base-100 w-10 rounded-full ring-2 ring-offset-2">
-                                <img src={user.photoURL} alt="User Avatar" />
-                            </motion.div>
-                        </Link>
+                        <>
+                            <Link
+                                to="/my-profile"
+                                data-tooltip-id="avatar-tooltip"
+                                data-tooltip-content={user.displayName || user.email || "User"}
+                                className="avatar mr-3"
+                            >
+                                <motion.div whileHover={{ scale: 1.05 }} className="ring-primary ring-offset-base-100 w-10 rounded-full ring-2 ring-offset-2">
+                                    <img src={user.photoURL} alt="User Avatar" />
+                                </motion.div>
+                            </Link>
+                            <ReactTooltip
+                                id="avatar-tooltip"
+                                place="bottom"
+                                type={darkMode ? "light" : "dark"}
+                                effect="solid"
+                                delayShow={150}
+                            />
+                        </>
                     )}
+
                     {/* Dark Mode Toggle Button */}
                     <button
                         onClick={toggleDarkMode}
@@ -249,7 +267,6 @@ const Navbar = () => {
                     </motion.div>
                 )}
             </AnimatePresence>
-
         </nav>
     );
 };

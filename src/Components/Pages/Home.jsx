@@ -4,6 +4,8 @@ import { useLoaderData } from 'react-router';
 import PlantCard from '../HomeComponents/PlantCard';
 import AuthContext from '../../Context/AuthContext';
 
+import { Tooltip as ReactTooltip } from 'react-tooltip';  // Correct named import
+
 const Home = () => {
     const { darkMode } = useContext(AuthContext);
     const plants = useLoaderData();
@@ -12,7 +14,7 @@ const Home = () => {
         <div className={`${darkMode ? 'bg-gray-800 text-gray-100' : 'bg-white text-gray-900'}`}>
             {/* Hero Section */}
             <section className={`text-center ${darkMode ? 'bg-gradient-to-b from-gray-700 to-gray-800' : 'bg-gradient-to-b from-green-50 to-white'}`}>
-                <h1 className={`text-3xl md:text-6xl font-extrabold ${darkMode ? 'text-green-300' : 'text-green-700'} mb-6`}>
+                <h1 className={`text-3xl md:text-6xl font-extrabold ${darkMode ? 'text-green-300' : 'text-green-700'} pt-5 mb-6`}>
                     Feel The Nature
                 </h1>
                 <p className={`max-w-3xl mx-auto text-sm md:text-base font-medium leading-relaxed ${darkMode ? 'text-gray-300' : 'text-green-600'}`}>
@@ -36,7 +38,10 @@ const Home = () => {
                 </h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                     {plants.map((plant) => (
-                        <PlantCard key={plant._id} plant={plant} />
+                        <div key={plant._id} data-tooltip-id={`tooltip-${plant._id}`} data-tooltip-content={plant.plantName || 'No scientific name available'}>
+                            <PlantCard plant={plant} />
+                            <ReactTooltip id={`tooltip-${plant._id}`} place="top" type={darkMode ? 'light' : 'dark'} effect="solid" delayShow={200} />
+                        </div>
                     ))}
                 </div>
             </section>
