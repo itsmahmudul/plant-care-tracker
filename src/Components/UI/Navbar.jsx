@@ -2,12 +2,9 @@ import React, { useContext, useState } from "react";
 import { Menu, X, Moon, Sun } from "lucide-react";
 import { Link, NavLink } from "react-router";
 import { motion, AnimatePresence } from "framer-motion";
-
-
 import { Tooltip as ReactTooltip } from "react-tooltip";
 import 'react-tooltip/dist/react-tooltip.css';
 import AuthContext from "../../Context/AuthContext";
-
 
 const navItems = [
     { name: "Home", path: "/" },
@@ -45,10 +42,8 @@ const Navbar = () => {
 
     const handleLogOut = () => {
         logOutUser()
-            .then(() => {
-                console.log('logOut successfully')
-            })
-            .catch(error => console.log(error))
+            .then(() => console.log('logOut successfully'))
+            .catch(error => console.log(error));
     };
 
     return (
@@ -57,7 +52,8 @@ const Navbar = () => {
                 } shadow-md px-6 py-4 backdrop-blur-sm sticky top-0 z-50 transition-colors duration-300`}
         >
             <div className="max-w-7xl mx-auto flex items-center justify-between relative">
-                {/* Logo with entrance animation and hover scale */}
+
+                {/* Logo */}
                 <Link to="/">
                     <motion.div
                         whileHover={{ scale: 1.1 }}
@@ -77,15 +73,15 @@ const Navbar = () => {
                             <NavLink
                                 key={name}
                                 to={path}
+                                data-tooltip-id="navlink-tooltip"
+                                data-tooltip-content={name}
                                 className={({ isActive }) =>
-                                    `relative px-2 py-1 hover:text-green-300 transition duration-200 ${isActive ? "text-green-300 font-semibold" : ""
-                                    }`
+                                    `relative px-2 py-1 hover:text-green-300 transition duration-200 ${isActive ? "text-green-300 font-semibold" : ""}`
                                 }
                             >
                                 {({ isActive }) => (
                                     <>
                                         <li>{name}</li>
-                                        {/* Animated underline for active link */}
                                         <motion.div
                                             layoutId="underline"
                                             initial={false}
@@ -99,9 +95,8 @@ const Navbar = () => {
                         ))}
                 </ul>
 
-                {/*Avatar + Desktop Login + Dark Mode Toggle */}
+                {/* Avatar + Dark Mode + Auth (Desktop) */}
                 <div className="hidden md:flex items-center space-x-4">
-                    {/* Avatar with Tooltip */}
                     {user && (
                         <>
                             <Link
@@ -114,17 +109,10 @@ const Navbar = () => {
                                     <img src={user.photoURL} alt="User Avatar" />
                                 </motion.div>
                             </Link>
-                            <ReactTooltip
-                                id="avatar-tooltip"
-                                place="bottom"
-                                type={darkMode ? "light" : "dark"}
-                                effect="solid"
-                                delayShow={150}
-                            />
+                            <ReactTooltip id="avatar-tooltip" place="bottom" type={darkMode ? "light" : "dark"} effect="solid" delayShow={150} />
                         </>
                     )}
 
-                    {/* Dark Mode Toggle Button */}
                     <button
                         onClick={toggleDarkMode}
                         aria-label="Toggle dark mode"
@@ -136,15 +124,10 @@ const Navbar = () => {
                             animate={{ rotate: 360, scale: 1.2 }}
                             transition={{ duration: 0.5 }}
                         >
-                            {darkMode ? (
-                                <Sun size={20} className="text-yellow-300" />
-                            ) : (
-                                <Moon size={20} />
-                            )}
+                            {darkMode ? <Sun size={20} className="text-yellow-300" /> : <Moon size={20} />}
                         </motion.div>
                     </button>
 
-                    {/* Login Button */}
                     <motion.button
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
@@ -158,7 +141,7 @@ const Navbar = () => {
                     </motion.button>
                 </div>
 
-                {/* Hamburger Button with rotation animation */}
+                {/* Hamburger Button */}
                 <button
                     className="cursor-pointer md:hidden focus:outline-none hover:text-green-300 transition"
                     onClick={toggleMenu}
@@ -175,7 +158,7 @@ const Navbar = () => {
                 </button>
             </div>
 
-            {/* Mobile menu with AnimatePresence */}
+            {/* Mobile menu */}
             <AnimatePresence>
                 {isOpen && (
                     <motion.div
@@ -183,16 +166,16 @@ const Navbar = () => {
                         animate="visible"
                         exit="hidden"
                         variants={menuVariants}
-                        className={`md:hidden mt-4 overflow-hidden ${darkMode ? "bg-gray-900 text-white" : "bg-green-900 text-white"
-                            } rounded-lg shadow-lg border border-green-700`}
+                        className={`md:hidden mt-4 overflow-hidden ${darkMode ? "bg-gray-900 text-white" : "bg-green-900 text-white"} rounded-lg shadow-lg border border-green-700`}
                     >
-                        {/* Navigation Links */}
                         <ul className="flex flex-col space-y-2 px-4 pt-4 pb-2 text-base font-medium">
                             {navItems.map(({ name, path }) => (
                                 <NavLink
                                     key={name}
                                     to={path}
                                     onClick={() => setIsOpen(false)}
+                                    data-tooltip-id="navlink-tooltip"
+                                    data-tooltip-content={name}
                                     className={({ isActive }) =>
                                         `block w-full px-3 py-2 rounded-md transition ${isActive
                                             ? "bg-green-700 text-green-200 font-semibold"
@@ -207,27 +190,21 @@ const Navbar = () => {
 
                         <hr className="border-green-700 mx-4 my-3" />
 
-                        {/* User + Theme + Auth Controls */}
                         <div className="px-4 pb-4 space-y-3">
                             <div className="flex items-center justify-between">
-                                {/* Avatar */}
                                 {user && (
                                     <Link
                                         to="/my-profile"
                                         onClick={() => setIsOpen(false)}
                                         className="flex items-center space-x-2"
                                     >
-                                        <motion.div
-                                            whileHover={{ scale: 1.05 }}
-                                            className="w-10 h-10 rounded-full ring-2 ring-green-300 overflow-hidden"
-                                        >
+                                        <motion.div whileHover={{ scale: 1.05 }} className="w-10 h-10 rounded-full ring-2 ring-green-300 overflow-hidden">
                                             <img src={user.photoURL} alt="User Avatar" className="w-full h-full object-cover" />
                                         </motion.div>
                                         <span className="text-sm">{user.displayName || "My Profile"}</span>
                                     </Link>
                                 )}
 
-                                {/* Dark Mode Toggle */}
                                 <button
                                     onClick={() => {
                                         toggleDarkMode();
@@ -242,23 +219,16 @@ const Navbar = () => {
                                         animate={{ rotate: 360, scale: 1.2 }}
                                         transition={{ duration: 0.5 }}
                                     >
-                                        {darkMode ? (
-                                            <Sun size={20} className="text-yellow-300" />
-                                        ) : (
-                                            <Moon size={20} />
-                                        )}
+                                        {darkMode ? <Sun size={20} className="text-yellow-300" /> : <Moon size={20} />}
                                     </motion.div>
                                 </button>
                             </div>
 
-                            {/* Login / Logout */}
                             <motion.button
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
                                 onClick={() => {
-                                    if (user) {
-                                        handleLogOut();
-                                    }
+                                    if (user) handleLogOut();
                                     setIsOpen(false);
                                 }}
                                 className="w-full text-center rounded-md bg-green-700 hover:bg-green-600 px-4 py-2 text-white transition"
@@ -269,6 +239,9 @@ const Navbar = () => {
                     </motion.div>
                 )}
             </AnimatePresence>
+
+            {/* Tooltips */}
+            <ReactTooltip id="navlink-tooltip" place="bottom" type={darkMode ? "light" : "dark"} effect="solid" delayShow={150} />
         </nav>
     );
 };
