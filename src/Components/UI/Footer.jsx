@@ -4,6 +4,7 @@ import { FaLocationDot, FaEnvelope, FaClock } from "react-icons/fa6";
 import { Link } from "react-router";
 import AuthContext from "../../Context/AuthContext";
 
+
 export default function Footer() {
   const { darkMode } = useContext(AuthContext);
   const [visible, setVisible] = useState(false);

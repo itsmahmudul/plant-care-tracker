@@ -214,7 +214,7 @@ const Home = () => {
                 {/* Right side: photo */}
                 <div className="md:w-1/2 w-full flex justify-center">
                     <img
-                        src="/path-to-your-image.jpg"
+                        src="https://i.ibb.co/PGjWQFLh/shutterstock-1948724596-min.jpg"
                         alt="Plant care"
                         className="rounded-3xl shadow-lg max-w-full h-auto object-cover"
                     />

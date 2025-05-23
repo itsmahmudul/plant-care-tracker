@@ -2,10 +2,12 @@ import React, { useContext, useState } from "react";
 import { Menu, X, Moon, Sun } from "lucide-react";
 import { Link, NavLink } from "react-router";
 import { motion, AnimatePresence } from "framer-motion";
-import AuthContext from "../../Context/AuthContext";
+
 
 import { Tooltip as ReactTooltip } from "react-tooltip";
 import 'react-tooltip/dist/react-tooltip.css';
+import AuthContext from "../../Context/AuthContext";
+
 
 const navItems = [
     { name: "Home", path: "/" },
