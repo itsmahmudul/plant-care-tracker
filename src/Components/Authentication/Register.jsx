@@ -65,26 +65,26 @@ const Register = () => {
                         type="text"
                         name="name"
                         placeholder="Full Name"
-                        className="w-full px-4 py-2 border border-green-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 bg-green-50"
+                        className="w-full px-4 py-2 border border-green-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 bg-gray-200"
                     />
                     <input
                         type="email"
                         name="email"
                         placeholder="Email"
-                        className="w-full px-4 py-2 border border-green-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 bg-green-50"
+                        className="w-full px-4 py-2 border border-green-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 bg-gray-200"
                     />
                     <input
                         type="text"
                         name="photo"
                         placeholder="Photo URL"
-                        className="w-full px-4 py-2 border border-green-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 bg-green-50"
+                        className="w-full px-4 py-2 border border-green-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 bg-gray-200"
                     />
                     <div className="relative">
                         <input
                             type={showPass ? 'text' : 'password'}
                             name="password"
                             placeholder="Password"
-                            className="w-full px-4 py-2 border border-green-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 bg-green-50"
+                            className="w-full px-4 py-2 border border-green-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400 bg-gray-200"
                         />
                         <button
                             type="button"
@@ -111,9 +111,9 @@ const Register = () => {
                 {errorMes && <p className="text-red-500 mt-2 text-sm text-center">{errorMes}</p>}
                 {success && <p className="text-green-600 mt-2 text-sm text-center">User created successfully!</p>}
 
-                <div className="my-4 text-center text-sm text-green-700">
+                <div className="my-4 text-center text-sm text-green-500">
                     Already have an account?{" "}
-                    <Link to="/login" className="text-green-600 font-medium hover:underline">
+                    <Link to="/login" className="text-yellow-300 font-medium hover:underline">
                         Login here
                     </Link>
                 </div>
