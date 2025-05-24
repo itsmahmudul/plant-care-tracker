@@ -48,8 +48,12 @@ const Register = () => {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center px-4">
-            <div className={`shadow-lg rounded-3xl max-w-md w-full p-8 border border-green-200 relative ${darkMode ? "bg-gray-900" : "bg-green-50"
+        <div className="min-h-screen flex items-center justify-center px-4" 
+        style={{
+            backgroundImage: `url('https://i.ibb.co/ZRF81PhW/7971052-3769238.jpg')`
+        }}
+        >
+            <div className={`shadow-lg rounded-3xl max-w-md w-full p-8 border border-green-200 relative ${darkMode ? "bg-gray-900/50 backdrop-blur" : "bg-white/10 backdrop-blur "
         }`}>
                 <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-green-100 p-3 rounded-full shadow-md">
                     🌿
