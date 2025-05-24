@@ -52,6 +52,7 @@ const AllPlants = () => {
                 </select>
             </div>
 
+            {/* table section */}
             <div className={`overflow-x-auto rounded-lg shadow-lg border ${darkMode ? 'border-gray-700 bg-gray-800' : 'border-gray-300 bg-white'}`}>
                 <table className="min-w-full table-auto border-collapse">
                     <thead className={`${darkMode ? 'bg-green-900' : 'bg-green-100'}`}>

@@ -60,14 +60,14 @@ const Navbar = () => {
                         initial={{ opacity: 0, y: -10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ type: "spring", stiffness: 120, damping: 10 }}
-                        className="text-2xl font-bold flex items-center cursor-pointer select-none"
+                        className="text-xl xl:text-2xl font-bold flex items-center cursor-pointer select-none"
                     >
                         <span className="text-3xl mr-2">🌿</span> Plant Care Tracker
                     </motion.div>
                 </Link>
 
                 {/* Desktop Nav */}
-                <ul className="hidden md:flex space-x-8 text-sm font-medium absolute left-1/2 transform -translate-x-1/2">
+                <ul className="hidden lg:flex space-x-8 lg:text-[10px] xl:text-sm font-medium absolute left-1/2 transform -translate-x-1/2">
                     {navItems.filter(item => !(user && item.name === "Register"))
                         .map(({ name, path }) => (
                             <NavLink
@@ -96,7 +96,7 @@ const Navbar = () => {
                 </ul>
 
                 {/* Avatar + Dark Mode + Auth (Desktop) */}
-                <div className="hidden md:flex items-center space-x-4">
+                <div className="hidden lg:flex items-center space-x-4">
                     {user && (
                         <>
                             <Link
@@ -143,7 +143,7 @@ const Navbar = () => {
 
                 {/* Hamburger Button */}
                 <button
-                    className="cursor-pointer md:hidden focus:outline-none hover:text-green-300 transition"
+                    className="cursor-pointer lg:hidden focus:outline-none hover:text-green-300 transition"
                     onClick={toggleMenu}
                     aria-label="Toggle menu"
                 >
@@ -166,7 +166,7 @@ const Navbar = () => {
                         animate="visible"
                         exit="hidden"
                         variants={menuVariants}
-                        className={`md:hidden mt-4 overflow-hidden ${darkMode ? "bg-gray-900 text-white" : "bg-green-900 text-white"} rounded-lg shadow-lg border border-green-700`}
+                        className={`lg:hidden mt-4 overflow-hidden ${darkMode ? "bg-gray-900 text-white" : "bg-green-900 text-white"} rounded-lg shadow-lg border border-green-700`}
                     >
                         <ul className="flex flex-col space-y-2 px-4 pt-4 pb-2 text-base font-medium">
                             {navItems.map(({ name, path }) => (
