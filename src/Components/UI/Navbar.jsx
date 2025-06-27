@@ -10,7 +10,6 @@ const navItems = [
     { name: "Home", path: "/" },
     { name: "All Plants", path: "/all-plants" },
     { name: "Add Plant", path: "/add-plants" },
-    { name: "My Plants", path: "/my-plants" },
     { name: "Register", path: "/register" },
     { name: "Dashboard", path: "/dashboard"},
     { name: "About", path: "/about" },
@@ -106,7 +105,7 @@ const Navbar = () => {
                     {user && (
                         <>
                             <Link
-                                to="/my-profile"
+                                to="/dashboard/my-profile"
                                 data-tooltip-id="avatar-tooltip"
                                 data-tooltip-content={user.displayName || user.email || "User"}
                                 className="avatar mr-3"
