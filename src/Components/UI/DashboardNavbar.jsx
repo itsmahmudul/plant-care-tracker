@@ -21,7 +21,7 @@ const DashboardNavbar = () => {
             className={`shadow-md p-4 flex flex-col gap-2 md:min-h-screen md:w-64 
                 ${darkMode ? 'bg-gray-900 text-gray-300' : 'bg-white text-gray-900'}`}
         >
-            <NavLink to="/dashboard">
+            <NavLink to="/">
                 <h2
                     className={`text-xl font-bold mb-4 cursor-pointer ${
                         darkMode ? 'text-green-300' : 'text-green-700'
@@ -67,6 +67,10 @@ const DashboardNavbar = () => {
                 <NavLink to="/dashboard/my-profile" className={linkClass('/dashboard/my-profile')}>
                     <User size={18} className="inline mr-2" />
                     My Profile
+                </NavLink>
+                <NavLink to="/" className={linkClass('/')}>
+                    <User size={18} className="inline mr-2" />
+                    Back to Home
                 </NavLink>
             </nav>
         </div>
