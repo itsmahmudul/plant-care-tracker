@@ -12,6 +12,7 @@ const navItems = [
     { name: "Add Plant", path: "/add-plants" },
     { name: "My Plants", path: "/my-plants" },
     { name: "Register", path: "/register" },
+    { name: "Dashboard", path: "/dashboard"},
     { name: "About", path: "/about" },
 ];
 
@@ -68,7 +69,12 @@ const Navbar = () => {
 
                 {/* Desktop Nav */}
                 <ul className="hidden lg:flex space-x-8 lg:text-[10px] xl:text-sm font-medium absolute left-1/2 transform -translate-x-1/2">
-                    {navItems.filter(item => !(user && item.name === "Register"))
+                    {navItems.filter(item => {
+                        if (item.name === "Register" && user) return false;
+                        if (item.name === "My Plants" && !user) return false;
+                        if (item.name === "Dashboard" && !user) return false;
+                        return true;
+                    })
                         .map(({ name, path }) => (
                             <NavLink
                                 key={name}

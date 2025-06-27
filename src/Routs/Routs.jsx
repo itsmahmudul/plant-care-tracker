@@ -12,6 +12,7 @@ import MyProfile from "../Components/Pages/MyProfile";
 import PrivetRouts from "./PrivetRouts";
 import PlantDetails from "../Components/HomeComponents/PlantDetails";
 import UpdatePlant from "../Components/Pages/UpdatePlant";
+import Dashboard from "../Components/Pages/Dashboard";
 
 
 const router = createBrowserRouter([
@@ -23,7 +24,7 @@ const router = createBrowserRouter([
             {
                 path: '/',
                 loader: () => fetch('https://plant-care-tracker-omega.vercel.app/plants'),
-                hydrateFallbackElement:<div className="text-center mt-10"><span className="loading loading-bars loading-xl"></span></div>, 
+                hydrateFallbackElement: <div className="text-center mt-10"><span className="loading loading-bars loading-xl"></span></div>,
                 element: <Home></Home>
             },
             {
@@ -62,6 +63,12 @@ const router = createBrowserRouter([
                 loader: ({ params }) => fetch(`https://plant-care-tracker-omega.vercel.app/plants/${params.plantId}`),
                 element: <PrivetRouts>
                     <UpdatePlant></UpdatePlant>
+                </PrivetRouts>
+            },
+            {
+                path: '/dashboard',
+                element: <PrivetRouts>
+                    <Dashboard></Dashboard>
                 </PrivetRouts>
             },
             {
